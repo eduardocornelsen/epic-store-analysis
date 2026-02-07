@@ -130,4 +130,13 @@ jupyter notebook notebooks/epic_games_analysis.ipynb
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/eduardocornelsen)
 
 *Analysis generated via Python Analysis Pipeline. Visualizations powered by Plotly & Seaborn with a custom Cyberpunk UI Library.*
+
+---
+
+## ⚖️ License
+
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute the code for both personal and commercial purposes. See the [LICENSE](LICENSE) file for the full text.
+
+*Copyright (c) 2026 Eduardo Cornelsen*
+
 <div>
