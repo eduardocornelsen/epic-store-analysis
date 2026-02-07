@@ -1,4 +1,4 @@
-# ⚡ EGS Ecosystem Intelligence: Strategic Market Audit (2025)
+# ⚡ Epic Games Store (EGS) Ecosystem Intelligence: Strategic Market Audit (2025)
 
 ![Banner](https://img.shields.io/badge/Status-Complete-success) ![Python](https://img.shields.io/badge/Python-3.11-blue) ![Library](https://img.shields.io/badge/Library-Pandas%20|%20ScikitLearn%20|%20Plotly-orange) ![Theme](https://img.shields.io/badge/Visuals-Cyberpunk_Aesthetic-ff00ff)
 
