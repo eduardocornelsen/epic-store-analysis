@@ -1,0 +1,28 @@
+# ------------------------------------------------------------------
+# CORE DATA SCIENCE STACK
+# ------------------------------------------------------------------
+pandas>=2.0.0          # Data manipulation (Required for Dtype optimization)
+numpy>=1.24.0          # Numerical computing (Required for K-Means/Vectors)
+scipy>=1.10.0          # Scientific computing (Required for Dendrograms)
+
+# ------------------------------------------------------------------
+# MACHINE LEARNING & NLP
+# ------------------------------------------------------------------
+scikit-learn>=1.3.0    # K-Means, Random Forest, PCA, T-SNE
+nltk>=3.8.1            # VADER Sentiment Analysis
+wordcloud>=1.9.0       # Visualizing text data (Critic Reviews)
+
+# ------------------------------------------------------------------
+# VISUALIZATION SUITE (Cyberpunk Aesthetic)
+# ------------------------------------------------------------------
+matplotlib>=3.7.0      # Static plotting (Seaborn dependency)
+seaborn>=0.12.2        # Statistical plots (Boxplots, Heatmaps)
+plotly>=5.15.0         # Interactive graphs (The Value Gap, Scatter plots)
+
+# ------------------------------------------------------------------
+# NOTEBOOK UTILITIES
+# ------------------------------------------------------------------
+ipython>=8.10.0        # Required for display(), Markdown() rendering
+jupyterlab>=4.0.0      # (Optional) Modern notebook interface
+jinja2>=3.1.2          # Required for Pandas Styler (The Cyberpunk Tables)
+pillow>=9.5.0          # Image processing (Required for WordCloud)
