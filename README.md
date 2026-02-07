@@ -7,6 +7,14 @@
 > **Principal Data Scientist & UXR Consultant Portfolio Piece**  
 > *Bridging the gap between raw metadata and actionable product strategy for the Epic Games Store.*
 
+
+<div align='center'>
+
+[ ![View Slides](https://img.shields.io/badge/View_UXR_Presentation-ff00ff?style=for-the-badge&logo=microsoftpowerpoint&logoColor=white) ](reports/UXR_Executive_Presentation_EGS.pdf)
+[ ![View Notebook](https://img.shields.io/badge/View_Technical_Notebook-159279?style=for-the-badge&logo=jupyter&logoColor=black) ](notebooks/epic_notebook.ipynb)
+
+<div>
+
 ---
 
 ## 🌐 Project Context
