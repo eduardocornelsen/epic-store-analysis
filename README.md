@@ -17,6 +17,8 @@
 
 ---
 
+<div align='left'>
+
 ## 🌐 Project Context
 As the digital storefront landscape becomes increasingly competitive, understanding the interplay between **Technical Requirements**, **Pricing Strategy**, and **Critic Sentiment** is vital. 
 
@@ -92,16 +94,21 @@ This project utilized a full-stack Data Science pipeline:
 │   ├── tweets.csv              # Raw tweet data (unused due to quality issues)
 │   └── twitter_accounts.csv    # Developer account metadata
 │
-├── notebooks/
+├── notebooks/                  # Code and technical pipeline
 │   ├── epic_notebook.html      # Static report view
 │   ├── epic_notebook.ipynb     # The Main Analysis Pipeline (Exec)
 │   └── epic-notebook.pdf       # Printable executive brief
+│
+├── reports/                    # Presentation slides
+│   └── UXR_Executive_Presentation_EGS.pdf  # UXR Presentation
 │
 ├── portfolio_assets/           # Project branding & cover images
 │
 ├── images/                     # Exported visualizations for README
 ├── requirements.txt            # Python dependencies
+├── LICENSE                     # MIT License
 └── README.md                   # Project documentation
+
 ```
 
 ---
@@ -125,6 +132,8 @@ pip install -r requirements.txt
 ```Bash
 jupyter notebook notebooks/epic_games_analysis.ipynb
 ```
+
+<div>
 
 ---
 <div align='center'>
