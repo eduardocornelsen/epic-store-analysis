@@ -57,6 +57,19 @@ Temporal analysis reveals a significant **Quality Gap** during the Q4 push.
 
 ---
 
+### 4. Content Strategy: The Genre Opportunity Matrix
+We mapped User Satisfaction against Genres to identify "Safe Bets" vs. "Blue Oceans."
+
+*   **The "Gold Zone" (Multiplayer & Indie):** These genres within the **AAA High-Fidelity** persona represent the platform's strongest quality-to-performance segments (Ratings > 80).
+*   **The "Action" Volatility:** Action games show the highest contrast between High-Spec (Success) and Risk (Failure), confirming that action gamers are the least forgiving of performance issues.
+*   **The "Blue Ocean" (Puzzle):** The black cell (0.0) in the High-Spec Puzzle category reveals a complete lack of inventory. A high-fidelity Puzzle title would face **zero competition** in this specific quadrant.
+
+![Strategic Heatmap](images/strategic_heatmap.png)
+
+* **Action:** Direct the **Content Acquisition Team** to scout for a flagship "High-Fidelity Puzzle" exclusive to capture the unserved market gap, while enforcing stricter optimization milestones for incoming Action RPGs.
+
+---
+
 ## 🛠️ Technical Methodology
 
 This project utilized a full-stack Data Science pipeline:
