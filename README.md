@@ -37,18 +37,23 @@ We identified a critical failure point at the **8GB RAM threshold**. High-spec g
 ![The Accessibility Barrier](images/accessibility_barrier.png)
 * **Action:** Implement a **"Performance Certification"** badge for high-spec titles to reduce refund rates.
 
+---
 ### 2. The "Niche Premium" Opportunity
 Using K-Means Clustering, we identified the most efficient market segment: **Cluster 3 (Premium Low-Spec)**. These titles command high prices (~$26) despite low hardware requirements (<3GB RAM) and maintain elite ratings (75+).
 
 ![The Value Gap](images/value_gap.png)
 * **Action:** Modify the Store Algorithm to boost visibility for "Premium Indie" titles.
 
+---
+
 ### 3. The "Holiday Quality Trap" (Seasonality)
-Temporal analysis reveals a significant **Quality Gap** during the Q4 holiday rush. While release volume peaks in Oct/Nov, average ratings take an aggressive dive.
-* **Insight:** **April** emerges as a "Masterpiece Window" with high ratings and low competition.
-* **Action:** Advise high-potential partners to target **Q2 Releases** to avoid the Q4 noise.
+Temporal analysis reveals a significant **Quality Gap** during the Q4 push.
+
+*   **The Crunch (Sept–Dec):** Release volume explodes to its annual peak in **September (110 titles)**. As the market floods with content, average quality scores crash (from 74.8 in Aug to 73.9 in Sept) and remain suppressed through November.
+*   **The Insight:** The "Holiday Window" is a trap. The market is oversaturated starting in September, and the data suggests titles are being rushed to market to hit the Q4 sales window, sacrificing polish.
 
 ![Seasonality Check](images/seasonality_check.png)
+*   **Action:** Advise high-potential partners to target **Q2 (April)**—the "Spring Sweet Spot"—where quality is highest and competition is lowest.
 
 ---
 
@@ -60,16 +65,33 @@ This project utilized a full-stack Data Science pipeline:
 *   **Pipeline:** Robust cross-table merging of an 80MB relational dataset (Games, Hardware, Critics, Socials).
 *   **Integrity Audit:** Detected critical flaws in the source Twitter data (generic account linkage). Pivoted strategy to analyze **Ecosystem Breadth** (Platform Counts) instead of raw volume, saving the analysis from false conclusions.
 
-### 2. Machine Learning (Unsupervised & Supervised)
-*   **K-Means Clustering:** Segmented the store into 4 distinct "Product Personas" (Risk, Modern Standard, AAA, Niche Premium).
-*   **Random Forest Regression:** Achieved an **$R^2$ of 0.392**, proving that ~40% of a game's success is tied to metadata (Price/Specs), while 60% remains tied to intangible UX factors.
+### 2. Machine Learning (The "Metadata Gap")
+We used **Unsupervised Learning (K-Means)** to segment the store and **Supervised Learning (Random Forest)** to predict success.
+
+*   **The Discovery:** Our classification model achieved **60.7% Accuracy**, successfully acting as a "Gatekeeper" against low-quality bloatware (True Negatives).
+*   **The Insight:** However, the model missed **24.6% of the actual Hits** (False Negatives). This mathematically proves that "Fun" is not in the metadata. Identifying "Hidden Gems" requires **Human UXR**, not just algorithms.
+
+![Confusion Matrix](images/confusion_matrix.png)
   
 ![Cluster PCA](images/clustering_pca.png)
 
+### 🧠 Decoding the "User Algorithm" (SHAP Analysis)
+We used **XGBoost** with **SHAP values** to reverse-engineer the drivers of player satisfaction ($R^2 = 0.38$). The model reveals the hidden "mental math" users perform when evaluating a game.
 
+![SHAP Summary](images/shap_summary.png)
+
+*   **The "Niche" Multiplier:** The model assigns a positive score bonus to **Cluster 3 (Niche Premium)**. Users enter these games with lower resistance and higher openness to artistic experiences.
+*   **The "Hardware Penalty":** Notice the **Red Dots** (High RAM) on the `min_ram_gb` row are pushed to the **Left** (Negative Impact). This mathematically proves that high system requirements act as a **penalty**.
+    *   *Algo Logic:* "If RAM > 16GB, subtract points."
+    *   *User Reality:* "If I have to upgrade my PC, this game better be perfect."
+  
 ### 3. NLP & Semantic Analysis
 *   **LDA Topic Modeling:** Extracted 5 "Narrative Marketing Pillars" from game descriptions.
 *   **Hypothesis Testing:** Used Chi-Square tests to prove that Top Critics use a statistically distinct vocabulary ("Technical", "Bugs") when reviewing low-rated games.
+
+![Genre Description](images/genre_description.png)
+
+<br>
 
 ![NLP WordCloud](images/critic_wordcloud.png)
 
