@@ -1,8 +1,9 @@
+![Project Cover](/images/cover/Cover-H-16-9-EpicGames-UXResearch-low.jpg)
+
 # ⚡ Epic Games Store (EGS) Ecosystem Intelligence: Strategic Market Audit (2025)
 
 ![Banner](https://img.shields.io/badge/Status-Complete-success) ![Python](https://img.shields.io/badge/Python-3.11-blue) ![Library](https://img.shields.io/badge/Library-Pandas%20|%20ScikitLearn%20|%20Plotly-orange) ![Theme](https://img.shields.io/badge/Visuals-Cyberpunk_Aesthetic-ff00ff)
 
-![Project Cover](portfolio_assets/epic_cover_2.jpg)
 
 > **Principal Data Scientist & UXR Consultant Portfolio Piece**  
 > *Bridging the gap between raw metadata and actionable product strategy for the Epic Games Store.*
