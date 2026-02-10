@@ -36,9 +36,21 @@ def load_css():
             padding-bottom: 1rem !important;
         }
         
-        /* Optional: Hide the default "Running..." header if desired */
-        header {
-            visibility: hidden;
+        /* 1. Make the header transparent so it blends with the background */
+        header[data-testid="stHeader"] {
+            background-color: transparent !important;
+        }
+
+        /* 2. Hide the colored decorative line at the top */
+        div[data-testid="stDecoration"] {
+            display: none;
+        }
+
+        /* 3. Style the Sidebar Toggle Button to match your Cyberpunk theme */
+        button[kind="header"] {
+            background-color: transparent !important;
+            color: #00ffcc !important; /* Teal arrow */
+            border: 1px solid #00ffcc;
         }
         
         /* --- SCROLLBARS --- */
@@ -140,6 +152,123 @@ def load_css():
     """, unsafe_allow_html=True)
 
 load_css()
+
+# LOADING ANIMATION
+
+# ==============================================================================
+# 2.5 BOOT SEQUENCE ANIMATION
+# ==============================================================================
+def run_boot_sequence():
+    """
+    Renders a full-screen Cyberpunk boot sequence.
+    Runs only once per session.
+    """
+    if 'boot_completed' in st.session_state:
+        return
+
+    # -- ANIMATION CSS --
+    st.markdown("""
+    <style>
+        @keyframes flicker {
+            0% { opacity: 0.8; } 5% { opacity: 1; } 10% { opacity: 0.8; }
+            15% { opacity: 1; } 20% { opacity: 1; } 25% { opacity: 0.8; }
+            30% { opacity: 1; } 100% { opacity: 1; }
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .boot-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000000;
+            z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+        .boot-text {
+            color: #00ffcc; font-size: 1.5rem; font-weight: bold;
+            text-shadow: 0 0 10px #00ffcc;
+            margin-bottom: 20px;
+            animation: flicker 0.2s infinite;
+        }
+        .boot-log {
+            color: #ff00ff; font-size: 0.9rem;
+            text-align: left; width: 60%;
+            border-left: 2px solid #ff00ff;
+            padding-left: 15px;
+            height: 150px; overflow: hidden;
+            font-family: 'Courier New';
+            opacity: 0.8;
+        }
+        .scan-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 20px;
+            background: rgba(0, 255, 204, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            animation: scanline 2s linear infinite;
+            pointer-events: none;
+        }
+        .progress-border {
+            width: 60%; height: 20px; border: 1px solid #333;
+            margin-top: 20px; position: relative;
+        }
+        .progress-fill {
+            height: 100%; background-color: #00ffcc;
+            box-shadow: 0 0 15px #00ffcc;
+            transition: width 0.1s ease;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # -- ANIMATION LOGIC --
+    placeholder = st.empty()
+    
+    # Fake "Boot steps"
+    steps = [
+        "INITIALIZING NEURAL LINK...",
+        "BYPASSING EPIC STORE FIREWALL...",
+        "DECRYPTING GAME MANIFEST...",
+        "LOADING TENSORFLOW KERNELS...",
+        "OPTIMIZING GPU SHADERS...",
+        "SYNCHRONIZING REVIEWS...",
+        "SYSTEM READY."
+    ]
+    
+    logs = []
+    
+    # Run the sequence
+    with placeholder.container():
+        for i, step in enumerate(steps):
+            # Generate fake hex code scrolling
+            hex_noise = " ".join([hex(np.random.randint(0, 255))[2:].upper().zfill(2) for _ in range(8)])
+            logs.append(f"> {hex_noise} :: {step}")
+            if len(logs) > 6: logs.pop(0) # Keep log short
+            
+            # Progress calculation
+            progress = int((i + 1) / len(steps) * 100)
+            
+            # Render HTML manually
+            st.markdown(f"""
+                <div class="boot-container">
+                    <div class="scan-line"></div>
+                    <div class="boot-text">EPIC ANALYTICS PROTOCOL v3.0</div>
+                    <div class="boot-log">
+                        {"<br>".join(logs)}
+                    </div>
+                    <div class="progress-border">
+                        <div class="progress-fill" style="width: {progress}%;"></div>
+                    </div>
+                    <p style="color: #666; margin-top: 10px;">LOADING MODULES... {progress}%</p>
+                </div>
+            """, unsafe_allow_html=True)
+            
+            # Pause for effect (fast enough not to be annoying)
+            time.sleep(0.3 if i < len(steps)-1 else 0.8)
+
+    # Clear screen and set state
+    placeholder.empty()
+    st.session_state.boot_completed = True
+
 
 # ==============================================================================
 # 3. REAL DATA LOADING & MERGING
@@ -281,8 +410,14 @@ def render_metric_card(label, value, delta=None, color="#00ffcc"):
 # ==============================================================================
 
 # --- A. BOOT & DATA ---
+
+# 1. Run the Animation (It will check session_state internally to only run once)
+run_boot_sequence() 
+
 if 'booted' not in st.session_state: 
     st.session_state.booted = True
+
+# 2. Now load the actual data
 df = load_data()
 if df.empty: 
     st.stop()
@@ -312,7 +447,7 @@ def reset_callbacks():
 
 # 2. Global Filter UI (Visibility Logic)
 if page != "Neural Discovery Lab":
-    st.markdown("## 📊 EPIC STORE TELEMETRY")
+    st.markdown("## EPIC STORE TELEMETRY")
     
     # Global Search bar
     c_search, c_reset = st.columns([4, 1])
