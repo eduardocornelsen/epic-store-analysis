@@ -7,7 +7,7 @@
  ![Python](https://img.shields.io/badge/Python-3.11-blue) &nbsp;
  ![Library](https://img.shields.io/badge/Models-RandomForest_|_KMeans_|_LDA-orange) &nbsp;
  ![Theme](https://img.shields.io/badge/Visuals-Cyberpunk_Aesthetic-ff00ff) &nbsp;
- [![wakatime](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933.svg)](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933) <br><br>
+ [![wakatime](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933.svg)](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933) &nbsp;
  [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://epic-store-analysis.streamlit.app/)
 &nbsp;
 
@@ -21,7 +21,6 @@
 
 <br>
 
----
 <div>
 
 <br>
@@ -37,11 +36,26 @@
 <div>
 
 <div align='left'>
+
 <br>
 
 ---
-<br>
 
+## 📍 Navigation Menu
+*   [📋 **Executive Summary**](#-executive-summary-the-metadata-limit)
+*   [🚀 **Strategic Intelligence**](#-key-strategic-intelligence-2025-audit-findings)
+    *   [1. Market Personas & Friction](#1-market-personas--the-premium-friction-risk)
+    *   [2. The Hardware Wall Paradox](#2-the-hardware-wall-ux-friction)
+    *   [3. The Connectivity Premium](#3-the-connectivity-premium-social-ecosystem)
+    *   [4. Narrative DNA & NLP](#4-narrative-dna-beyond-metadata)
+*   [🗺️ **2026 Strategic Roadmap**](#-2026-actionable-roadmap)
+*   [🛠️ **Technical Methodology**](#-technical-methodology)
+*   [📂 **Repository Structure**](#-repository-structure)
+*   [💻 **Installation & Usage**](#-installation--usage)
+*   [🧠 **AI Briefings (Audio/Video)**](#-multi-modal-intelligence-ai-briefings)
+*   [📡 **System Telemetry**](#-system-telemetry-dev-stats)
+
+---
 ## 📋 Executive Summary: The "Metadata Limit"
 
 The 2026 strategic cycle marks a pivot for the Epic Games Store (EGS). We are moving beyond simple inventory management to decode the **"UX Alpha"**—the hidden drivers of player loyalty.
