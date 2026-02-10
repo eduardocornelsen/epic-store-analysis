@@ -12,7 +12,7 @@
 &nbsp;
 
 # ⚡ Epic Games Store (EGS): 2026 Ecosystem Intelligence Audit
----
+
 <div align='left'>
 
 ### **Data Scientist & UXR Consultant Portfolio Piece**
@@ -167,6 +167,15 @@ Based on these findings, we are implementing three high-impact initiatives:
 ### 3. Natural Language Processing (NLP)
 *   **LDA Topic Modeling:** Extracted the 5 Narrative Pillars.
 *   **Semantic Analysis:** Validated that "Technical" and "Bugs" are statistically distinct vocabulary drivers for low-rated games.
+
+---
+
+### 📡 Data Integrity & Temporal Context
+**Note on Chronology:** 
+While this Strategic Audit is designed for the **2026 Operational Cycle**, the underlying training data is derived from the **2022-2024 Ecosystem Baseline**. 
+
+**Why this matters:** 
+In Data Strategy, high-integrity historical audits are used to identify "Universal Frictions"—patterns that transcend individual release years. The **Hardware Wall (-0.13 correlation)** and **Social Focus Rule** identified here are persistent market forces. The analytical pipeline built here is designed to be fed with live 2026 telemetry for real-time strategic execution.
 
 ---
 
