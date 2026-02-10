@@ -1,11 +1,14 @@
 ![Project Cover](/images/cover/Cover-H-16-9-EpicGames-UXResearch-low.jpg)
 
-# ⚡ Epic Games Store (EGS): 2026 Ecosystem Intelligence Audit
 
+<div align='center'>
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://epic-store-analysis.streamlit.app/)
 ![Banner](https://img.shields.io/badge/Strategy-2026_Roadmap-7209b7) ![Python](https://img.shields.io/badge/Python-3.11-blue) ![Library](https://img.shields.io/badge/Models-RandomForest_|_KMeans_|_LDA-orange) ![Theme](https://img.shields.io/badge/Visuals-Cyberpunk_Aesthetic-ff00ff)
 
-> **Principal Data Scientist & UXR Consultant Portfolio Piece**  
-> *Transitioning EGS from a Digital Storefront to an "Ecosystem of Intelligence."*
+# ⚡ Epic Games Store (EGS): 2026 Ecosystem Intelligence Audit
+
+<div>
 
 <div align='center'>
 
@@ -13,9 +16,16 @@
 
 [ ![View Notebook](https://img.shields.io/badge/View_Technical_Notebook-159279?style=for-the-badge&logo=googlecolab&logoColor=white) ](https://colab.research.google.com/github/eduardocornelsen/epic-store-analysis/blob/main/notebooks/epic_notebook.ipynb)
 
+[ ![View Dashboard](https://img.shields.io/badge/View_Interactive_Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white) ](https://epic-store-analysis.streamlit.app/)
+
+
 <div>
 
 <div align='left'>
+
+### **Principal Data Scientist & UXR Consultant Portfolio Piece**
+> - **Principal Data Scientist:** Eduardo Cornelsen<br>
+> - **Methodology:** *K-Means Clustering, NLP (LDA & Sentiment), Random Forest Regression, Seasonal Trend Analysis.*
 
 ---
 
@@ -27,7 +37,7 @@ Our analysis, powered by **Random Forest Regression**, achieved an **$R^2$ score
 *   **The Reality:** Technical specifications, price, and genre predict only **40%** of a game's success.
 *   **The Gap:** The remaining **60%** is the **"Intangible UX"**—narrative resonance, art direction, and polish.
 
-**Principal Verdict:** Metadata is the foundation, but User Experience is the differentiator. To reach a 90+ rating, a game must transcend its specs and master the "Human-Led" elements of design.
+**Principal Verdict:** Metadata is the foundation, but User Experience is the differentiator. To reach a **90+ rating**, a game must transcend its specs and master the "Human-Led" elements of design.
 
 ---
 
@@ -63,6 +73,8 @@ When we rank the drivers of satisfaction, **Hardware Friction (-0.13)** acts as 
 
 *   **Strategic Mandate:** Optimization is no longer a technical afterthought; it is a "UX Alpha" differentiator. We must lower the "Hardware Anchor" to let the "Community Fuel" lift the game.
    
+![SHAP Summary](images/graphs/rating-anatomy.png)
+
 
 
 ---
@@ -110,7 +122,7 @@ Based on these findings, we are implementing three high-impact initiatives:
 *   **Tactic:** Shift marketing for Premium Indies ($40+) to the **"May-June Quality Peak."**
 *   **Data:** During this window, ratings hit 53+ with **40% less competition** than Q4, giving these expensive titles the visibility needed to justify their cost.
 
-![Seasonality Check](images/graphs/seasonality_check.png)
+![Seasonality Strategy](images/graphs/seasonality_check.png)
 
 ---
 
@@ -124,8 +136,6 @@ Based on these findings, we are implementing three high-impact initiatives:
 *   **Unsupervised:** K-Means Clustering for Market Segmentation.
 *   **Supervised:** Random Forest Regressor ($R^2 = 0.392$) to predict satisfaction drivers.
 *   **Explainability:** SHAP Values used to reverse-engineer the "Mental Math" of players (e.g., the penalty for high RAM requirements).
-
-![SHAP Summary](images/graphs/shap_summary.png)
 
 ### 3. Natural Language Processing (NLP)
 *   **LDA Topic Modeling:** Extracted the 5 Narrative Pillars.
@@ -199,23 +209,25 @@ jupyter notebook notebooks/epic_games_analysis.ipynb
 
 ---
 ## 🧠 Multi-Modal Intelligence: AI Briefings
-*To make these insights accessible to non-technical stakeholders, we utilized Google's **NotebookLM** to synthesize the findings into audio and video executive summaries.*
+
+To make these insights accessible to non-technical stakeholders, we utilized Google's NotebookLM to synthesize the findings into audio and video executive summaries.
 
 ### 🎧 Strategic Audio Briefings
 > *Deep-dive discussions on the "Hardware Wall" and market friction.*
 
 | Topic | Audio Link |
 | :--- | :--- |
-| **📉 The Hardware Wall** | [▶️ Solving The Epic Games Store Hardware Wall](media/Solving_The_Epic_Games_Store_Hardware_Wall.m4a) |
-| **🐌 Performance Debt** | [▶️ Why High Hardware Specs Hurt Game Ratings](media/Why_High_Hardware_Specs_Hurt_Game_Ratings.m4a) |
-| **💎 The Indie Opportunity** | [▶️ Niche Indies Beat High-Spec Bloatware](media/Niche_lndies_Beat_High_Spec_Bloatware.m4a) |
-| **🚫 The Graphics Trap** | [▶️ Why Better Graphics Tank Epic Store Ratings](media/Why_Better_Graphics_Tank_Epic_Store_Ratings.m4a) |
+| **📉 The Hardware Wall** | [▶️ Solving The Epic Games Store Hardware Wall](media/podcasts/Solving_The_Epic_Games_Store_Hardware_Wall.m4a) |
+| **🐌 Performance Debt** | [▶️ Why High Hardware Specs Hurt Game Ratings](media/podcasts/Why_High_Hardware_Specs_Hurt_Game_Ratings.m4a) |
+| **💎 The Indie Opportunity** | [▶️ Niche Indies Beat High-Spec Bloatware](media/podcasts/Niche_Indies_Beat_High_Spec_Bloatware.m4a) |
+| **🚫 The Graphics Trap** | [▶️ Why Better Graphics Tank Epic Store Ratings](media/podcasts/Why_Better_Graphics_Tank_Epic_Store_Ratings.m4a) |
 
 ### 📺 Visual Strategy Breakdown
 > *Video walkthroughs of the data playbook.*
 
-*   [**🎥 Hacking the Epic Games Store: The Playbook**](media/Hacking_the_Epic_Games_Store.mp4)
-*   [**🎥 Epic's Data Strategy: A Visual Audit**](media/Epic_s_Data_Playbook.mp4)
+*   [**🎥 Hacking the Epic Games Store: The Playbook**](media/videos/Hacking_the_Epic_Games_Store.mp4)
+*   [**🎥 Epic's Data Strategy: A Visual Audit**](media/videos/Epic_s_Data_Playbook.mp4)
+  
 ---
 <div align='center'>
 
