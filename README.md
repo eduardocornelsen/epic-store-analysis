@@ -3,13 +3,28 @@
 
 <div align='center'>
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://epic-store-analysis.streamlit.app/)
-![Banner](https://img.shields.io/badge/Strategy-2026_Roadmap-7209b7) ![Python](https://img.shields.io/badge/Python-3.11-blue) ![Library](https://img.shields.io/badge/Models-RandomForest_|_KMeans_|_LDA-orange) ![Theme](https://img.shields.io/badge/Visuals-Cyberpunk_Aesthetic-ff00ff)
+![Banner](https://img.shields.io/badge/Strategy-2026_Roadmap-7209b7) &nbsp;
+ ![Python](https://img.shields.io/badge/Python-3.11-blue) &nbsp;
+ ![Library](https://img.shields.io/badge/Models-RandomForest_|_KMeans_|_LDA-orange) &nbsp;
+ ![Theme](https://img.shields.io/badge/Visuals-Cyberpunk_Aesthetic-ff00ff) &nbsp;
+ [![wakatime](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933.svg)](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933) <br><br>
+ [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://epic-store-analysis.streamlit.app/)
+&nbsp;
 
 # ⚡ Epic Games Store (EGS): 2026 Ecosystem Intelligence Audit
+---
+<div align='left'>
 
+### **Data Scientist & UXR Consultant Portfolio Piece**
+> - **Principal Data Scientist:** Eduardo Cornelsen<br>
+> - **Methodology:** *K-Means Clustering, NLP (LDA & Sentiment), Random Forest Regression, Seasonal Trend Analysis.*
+
+<br>
+
+---
 <div>
 
+<br>
 <div align='center'>
 
 [ ![View Slides](https://img.shields.io/badge/View_UXR_Presentation-ff00ff?style=for-the-badge&logo=googledrive&logoColor=white) ](https://drive.google.com/file/d/1-bqd7O1e-ZP4aW_Bcv4mSAc0QmXR0cmB/view?usp=drive_link)
@@ -22,12 +37,10 @@
 <div>
 
 <div align='left'>
-
-### **Principal Data Scientist & UXR Consultant Portfolio Piece**
-> - **Principal Data Scientist:** Eduardo Cornelsen<br>
-> - **Methodology:** *K-Means Clustering, NLP (LDA & Sentiment), Random Forest Regression, Seasonal Trend Analysis.*
+<br>
 
 ---
+<br>
 
 ## 📋 Executive Summary: The "Metadata Limit"
 
@@ -227,8 +240,19 @@ To make these insights accessible to non-technical stakeholders, we utilized Goo
 
 *   [**🎥 Hacking the Epic Games Store: The Playbook**](media/videos/Hacking_the_Epic_Games_Store.mp4)
 *   [**🎥 Epic's Data Strategy: A Visual Audit**](media/videos/Epic_s_Data_Playbook.mp4)
-  
+
 ---
+
+<div align='center'>
+
+## 📡 System Telemetry (Dev Stats)
+
+| Metric | Status |
+| :--- | :--- |
+| **Neural Link Uptime** | [![wakatime](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933.svg)](https://wakatime.com/badge/user/4eb9be1d-cffd-4db6-a3b4-a831bb910af1/project/8e5e280a-e814-448a-ac09-c19f5554f933) |
+| **Core Systems** | Python, Streamlit, Plotly |
+| **Visual Engine** | CSS3 (Cyberpunk Overlay) |
+
 <div align='center'>
 
 ## 👤 Author
