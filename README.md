@@ -46,7 +46,15 @@
 > *Live demonstration of the Dashboard, AI Narrative Decoder, and Real-time Telemetry.*
 
 <div align="center">
-  <video src="https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664" width="100%" autoplay loop muted playsinline>
+  <video src="https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664" width="100%" 
+    controls 
+    muted 
+    loop 
+    playsinline>
+    Your browser does not support the video tag. 
+    <a href="https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664">
+      Click here to view the video file directly.
+   </a>
   </video>
 </div>
 
@@ -54,7 +62,7 @@
 
 ## 📍 Navigation Menu
 *   [📋 **Executive Summary**](#-executive-summary-the-metadata-limit)
-*   [🚀 **Strategic Intelligence**](#-key-strategic-intelligence-2025-audit-findings)
+*   [🚀 **Strategic Intelligence**](#-key-strategic-intelligence-2022-baseline-audit)
     *   [1. Market Personas & Friction](#1-market-personas--the-premium-friction-risk)
     *   [2. The Hardware Wall Paradox](#2-the-hardware-wall-ux-friction)
     *   [3. The Connectivity Premium](#3-the-connectivity-premium-social-ecosystem)
