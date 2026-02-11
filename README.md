@@ -45,11 +45,7 @@
 
 > *Live demonstration of the Dashboard, AI Narrative Decoder, and Real-time Telemetry.*
 
-<!-- 
-INSTRUCTION: Drag and drop your .mp4 file here in the GitHub editor. 
-GitHub will generate a link like: https://github.com/user/repo/assets/... 
--->
-[![Watch the Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID_HERE/maxresdefault.jpg)](https://youtu.be/YOUR_VIDEO_ID_HERE)
+https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664
 
 ---
 
