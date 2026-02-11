@@ -45,7 +45,11 @@
 
 > *Live demonstration of the Dashboard, AI Narrative Decoder, and Real-time Telemetry.*
 
-https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664" width="100%" controls>
+    Your browser does not support the video tag. [Click here to download the video](https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664)
+  </video>
+</div>
 
 ---
 
