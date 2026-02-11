@@ -50,12 +50,16 @@
     controls 
     muted 
     loop 
-    playsinline>
-    Your browser does not support the video tag. 
-    <a href="https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664">
-      Click here to view the video file directly.
-   </a>
+    playsinline>    
   </video>
+
+  <p align="center">
+    <sub>Can't see the video? 
+      <a href="https://github.com/user-attachments/assets/4d56d6f3-62b9-4e90-b87d-10d042ead664">
+        Click here to view the raw demo file.
+      </a>
+    </sub>
+  </p>
 </div>
 
 ---
