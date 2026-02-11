@@ -41,6 +41,18 @@
 
 ---
 
+## 🎥 System Walkthrough (Neural Core Demo)
+
+> *Live demonstration of the Dashboard, AI Narrative Decoder, and Real-time Telemetry.*
+
+<!-- 
+INSTRUCTION: Drag and drop your .mp4 file here in the GitHub editor. 
+GitHub will generate a link like: https://github.com/user/repo/assets/... 
+-->
+[![Watch the Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID_HERE/maxresdefault.jpg)](https://youtu.be/YOUR_VIDEO_ID_HERE)
+
+---
+
 ## 📍 Navigation Menu
 *   [📋 **Executive Summary**](#-executive-summary-the-metadata-limit)
 *   [🚀 **Strategic Intelligence**](#-key-strategic-intelligence-2025-audit-findings)
@@ -60,6 +72,9 @@
 
 The 2026 strategic cycle marks a pivot for the Epic Games Store (EGS). We are moving beyond simple inventory management to decode the **"UX Alpha"**—the hidden drivers of player loyalty.
 
+**Data Context:** 
+This audit utilizes the **2022 Ecosystem Baseline dataset**, capturing a critical growth period in the store's history. By analyzing this foundational year, we identified persistent market frictions—such as the "Hardware Wall"—that remain predictive of user sentiment today.
+
 Our analysis, powered by **Random Forest Regression**, achieved an **$R^2$ score of 0.392**.
 *   **The Reality:** Technical specifications, price, and genre predict only **40%** of a game's success.
 *   **The Gap:** The remaining **60%** is the **"Intangible UX"**—narrative resonance, art direction, and polish.
@@ -68,7 +83,7 @@ Our analysis, powered by **Random Forest Regression**, achieved an **$R^2$ score
 
 ---
 
-## 🚀 Key Strategic Intelligence (2025 Audit Findings)
+## 🚀 Key Strategic Intelligence (2022 Baseline Audit)
 
 ### 1. Market Personas & The "Premium Friction" Risk
 Using **K-Means Clustering**, we moved beyond genre labels to identify four behavioral "Product Personas."
