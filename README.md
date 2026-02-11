@@ -178,6 +178,61 @@ Based on these findings, we are implementing three high-impact initiatives:
 ![Seasonality Strategy](images/graphs/seasonality_check.png)
 
 ---
+## 🏗️ System Architecture: The Neural Pipeline
+
+> *A high-level view of the data flow, from raw ingestion to the interactive frontend.*
+
+```mermaid
+graph TD
+    %% Global Styles
+    classDef raw fill:#2d2d2d,stroke:#666,stroke-width:2px,color:#fff;
+    classDef etl fill:#333,stroke:#00ffcc,stroke-width:2px,color:#fff;
+    classDef model fill:#220033,stroke:#ff00ff,stroke-width:2px,color:#fff;
+    classDef ui fill:#000,stroke:#ffff00,stroke-width:2px,color:#fff;
+
+    subgraph INGESTION [💾 RAW DATA INGESTION]
+        direction TB
+        A[Games Metadata]:::raw
+        B[Hardware Specs]:::raw
+        C[Critic Reviews]:::raw
+    end
+
+    subgraph PROCESSING [⚙️ ETL & REFINERY]
+        D(Pandas Cleaning):::etl
+        E{Feature Engineering}:::etl
+        E -- "Extract" --> RAM[RAM Extraction]:::etl
+        E -- "Group" --> GENRE[Genre Taxonomy]:::etl
+    end
+
+    subgraph MODELS [🧠 THE NEURAL CORE]
+        direction TB
+        F[NLP Engine<br/>LDA + TF-IDF]:::model
+        G[Regression Model<br/>Random Forest]:::model
+        H[Cluster Engine<br/>K-Means]:::model
+    end
+
+    subgraph FRONTEND [🖥️ STREAMLIT DASHBOARD]
+        I[User Interface]:::ui
+        J[RecSys Module]:::ui
+        K[Visual Analytics]:::ui
+    end
+
+    %% Data Flow Connections
+    A & B & C ==> D
+    D ==> E
+    RAM & GENRE --> F & G & H
+    
+    %% Model Outputs to UI
+    F == "Semantic Vectors" ==> J
+    G == "Importance Feats" ==> K
+    H == "Personas" ==> K
+    
+    %% Internal UI Flow
+    J -.-> I
+    K -.-> I
+```
+
+---
 
 ## 🛠️ Technical Methodology
 
