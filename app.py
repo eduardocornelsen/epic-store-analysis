@@ -373,20 +373,38 @@ def load_data():
 def setup_neural_engine(_data):
     if _data.empty: return None, None, None, None
     
-    # 1. Vectorize (REMOVED random_state here)
-    tfidf_lda = TfidfVectorizer(max_df=0.95, min_df=2, stop_words='english')
-    dtm_lda = tfidf_lda.fit_transform(_data['description'])
+    from sklearn.feature_extraction import text 
     
-    # 2. LDA (KEEP random_state here for consistent topics)
+    # 1. EXPANDED BANNED LIST (Cleaning the pollution)
+    my_banned_words = [
+        'game', 'games', 'play', 'player', 'players', 
+        'world', 'new', 'experience', 'best', 
+        'adventure', 'action', 'story', 'time', 'use',
+        'based', 'set', 'includes', 'features', 'developed', 'content', # NEW BANS
+        'explore', 'different', 'way', 'make', 'like'                   # MORE BANS
+    ]
+    
+    # 2. MERGE
+    final_stop_words = list(text.ENGLISH_STOP_WORDS.union(my_banned_words))
+    
+    # 3. VECTORIZE
+    tfidf_lda = TfidfVectorizer(
+        max_df=0.5, 
+        min_df=2, 
+        stop_words=final_stop_words
+    )
+    dtm_lda = tfidf_lda.fit_transform(_data['description'].astype(str))
+    
+    # 4. LDA MODEL (Keeping random_state fixed helps, but data changes affect it)
     lda_model = LatentDirichletAllocation(
         n_components=5, 
-        random_state=42, # Crucial for 77.3% reproducibility
+        random_state=42, 
         learning_method='online',
         n_jobs=-1
     )
     lda_model.fit(dtm_lda)
     
-    # 3. Rec Engine
+    # 5. REC ENGINE
     tfidf_rec = TfidfVectorizer(stop_words='english', max_features=5000)
     dtm_rec = tfidf_rec.fit_transform(_data['full_text'])
     cosine_sim = cosine_similarity(dtm_rec, dtm_rec)
@@ -574,8 +592,7 @@ if page == "Dashboard Overview":
     # Metrics Calculation
     avg_p = dff['price'].mean()
     
-    # FIX: Calculate Avg Score excluding 0s (Unreviewed games)
-    # If filter allows 0s, we still exclude them from the "Average" metric so it represents "Rated Games"
+    # FIX: Calculate Avg Score excluding 0s
     scored_games = dff[dff['critic_score'] > 0]
     if not scored_games.empty:
         avg_s_100 = scored_games['critic_score'].mean()
@@ -583,43 +600,105 @@ if page == "Dashboard Overview":
     else:
         avg_s_5 = 0.0
 
-    # Metrics UI
+    # --- 1. METRICS (The "Big BANs") ---
     m1, m2, m3, m4 = st.columns(4)
     with m1: render_metric_card("Active Games", f"{len(dff)}", f"{(len(dff)/len(df)):.1%} of DB")
     with m2: render_metric_card("Avg Price", f"${avg_p:.2f}", "Filtered", "#ff00ff")
     with m3: render_metric_card("Avg Rating", f"⭐ {avg_s_5:.1f}/5", "Rated Games Only", "#00ffcc")
     with m4: render_metric_card("Top Genre", dff['primary_genre'].mode()[0] if not dff.empty else "N/A", "Dominant", "#ffff00")
    
-    # Charts
+    # --- 2. LEADERBOARD (Moved Here) ---
+    st.markdown("### 🏆 Top Rated Leaders")
+    
+    # Get top 5 sorted by score
+    leaders = dff.nlargest(5, 'critic_score')[['name', 'primary_genre', 'price', 'critic_score', 'developer']]
+    
+    st.dataframe(
+        leaders,
+        column_config={
+            "name": st.column_config.TextColumn("Game Title", width="medium"),
+            "primary_genre": "Genre",
+            "developer": "Developer",
+            "price": st.column_config.NumberColumn("Price", format="$%.2f"),
+            "critic_score": st.column_config.ProgressColumn(
+                "User Score", 
+                format="%.1f", # <--- CHANGED HERE (was %d)
+                min_value=0, 
+                max_value=100
+            ),
+        },
+        hide_index=True,
+        use_container_width=True
+    )
+
+    # --- 3. CHARTS ---
+    st.markdown("---")
+
     c1, c2 = st.columns([2, 1])
+    
     with c1:
-        st.markdown("### 📈 Performance Matrix")
+        st.markdown("### Performance Matrix")
         dff['plot_size'] = dff['review_count'].fillna(1).replace(0, 1)
         
-        fig = px.scatter(
-            dff, 
-            x='price', 
-            y='critic_score', 
-            color='primary_genre',
-            size='plot_size', 
-            # FIX: Changed 'ram_gb' to 'min_ram_gb' below
-            hover_data=['name', 'min_ram_gb', 'cpu_brand', 'gpu_brand'],
-            template='plotly_dark', 
-            opacity=0.8,
-            title=f"Price vs Quality (n={len(dff)})",
-            labels={
-                "price": "Price ($USD)",
-                "critic_score": "User Score (0-100)",
-                "primary_genre": "Genre",
-                "min_ram_gb": "Min RAM (GB)" # Clean label for hover
-            },
-            color_discrete_sequence=['#00ffcc', '#ff00ff', '#ffff00', '#00bfff']
-        )
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-        st.plotly_chart(fig, use_container_width=True)
+        # 1. CREATE TABS FOR SCATTER PLOTS
+        tab_price, tab_ram = st.tabs(["💰 Price Impact", "💾 RAM Specs"])
+        
+        # --- TAB 1: PRICE VS RATING (Existing) ---
+        with tab_price:
+            fig = px.scatter(
+                dff, 
+                x='price', 
+                y='critic_score', 
+                color='primary_genre',
+                size='plot_size', 
+                hover_data=['name', 'min_ram_gb', 'cpu_brand', 'gpu_brand'],
+                template='plotly_dark', 
+                opacity=0.8,
+                title=f"Price vs Quality (n={len(dff)})",
+                labels={
+                    "price": "Price ($USD)",
+                    "critic_score": "User Score (0-100)",
+                    "primary_genre": "Genre",
+                    "min_ram_gb": "Min RAM (GB)"
+                },
+                color_discrete_sequence=['#00ffcc', '#ff00ff', '#ffff00', '#00bfff']
+            )
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)', 
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(t=30, l=0, r=0, b=0)
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+        # --- TAB 2: RAM VS RATING (New) ---
+        with tab_ram:
+            fig_ram = px.scatter(
+                dff, 
+                x='min_ram_gb', 
+                y='critic_score', 
+                color='primary_genre',
+                size='plot_size',
+                hover_data=['name', 'price', 'cpu_brand'],
+                template='plotly_dark', 
+                opacity=0.8,
+                title=f"Hardware Requirements vs Quality",
+                labels={
+                    "min_ram_gb": "Minimum RAM Required (GB)",
+                    "critic_score": "User Score (0-100)",
+                    "primary_genre": "Genre"
+                },
+                color_discrete_sequence=['#ff00ff', '#00ffcc', '#ffff00', '#00bfff'] # Swapped colors for variety
+            )
+            fig_ram.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)', 
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(t=30, l=0, r=0, b=0),
+                xaxis=dict(tickmode='linear', tick0=0, dtick=4) # Clean 4GB steps
+            )
+            st.plotly_chart(fig_ram, use_container_width=True)
 
     with c2:
-        st.markdown("### 🍩 Market Share")
+        st.markdown("### Market Share")
         counts = dff['primary_genre'].value_counts()
         if len(counts) > 6:
             top_5 = counts.head(5)
@@ -634,85 +713,199 @@ if page == "Dashboard Overview":
             paper_bgcolor='rgba(0,0,0,0)', showlegend=False, margin=dict(t=0, b=0, l=0, r=0),
             annotations=[dict(text=f"{len(dff)}", x=0.5, y=0.5, font_size=20, showarrow=False)]
         )
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # --- NEW LEADERS TABLE ---
-        st.markdown("#### 🏆 Top Rated Leaders")
-        # Get top 5 sorted by score
-        leaders = dff.nlargest(5, 'critic_score')[['name', 'critic_score']]
-        # Convert score to 0-5 scale for display if desired, or keep 0-100
-        # Renaming for clean UI
-        leaders = leaders.rename(columns={
-            'name': 'Game Name',
-            'critic_score': 'User Score (0-100)'
-        })
-        st.dataframe(leaders, hide_index=True, use_container_width=True)
-        
+        st.plotly_chart(fig, use_container_width=True) 
 
 # ==============================================================================
 # PAGE 2: VISUAL ANALYTICS (Notebook Graphs)
 # ==============================================================================
 elif page == "Visual Analytics":
-    st.markdown("## 📉 DEEP DIVE ANALYTICS")
+    st.markdown("## DEEP DIVE ANALYTICS")
     st.markdown("Advanced visualization modules extracted from the Analysis Notebook.")
     st.markdown("---")
 
-    # --- TABBED INTERFACE FOR BETTER ORGANIZATION ---
-    tab1, tab2, tab3 = st.tabs(["💰 Pricing Economics", "⭐ Sentiment Analysis", "📝 Text Analytics"])
+    # --- MAIN TABS ---
+    tab1, tab2, tab3 = st.tabs(["💰 Economics & Distributions", "⭐ Sentiment Analysis", "📝 Text Analytics"])
 
+    # ==========================================================================
+    # TAB 1: ECONOMICS, HARDWARE & GENRES
+    # ==========================================================================
     with tab1:
-        st.markdown("### Price Distribution Strategy")
+        st.markdown("### Global Distributions")
+        
+        # 1. Global Price Histogram
         if 'price' in df.columns:
-            # Histogram
-            fig_hist = px.histogram(df, x='price', nbins=30, 
+            fig_hist = px.histogram(df, x='price', nbins=40, 
                                    template='plotly_dark', 
-                                   title="Distribution of Game Prices",
+                                   title="Global Price Distribution",
                                    color_discrete_sequence=['#00ffcc'])
             fig_hist.update_layout(bargap=0.1, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
             st.plotly_chart(fig_hist, use_container_width=True)
-            
-            # Boxplot by Genre
-            if 'primary_genre' in df.columns:
-                top_genres = df['primary_genre'].value_counts().head(10).index
-                df_filtered = df[df['primary_genre'].isin(top_genres)]
-                
-                fig_box = px.box(df_filtered, x='primary_genre', y='price', 
-                                template='plotly_dark',
-                                title="Pricing Strategy by Top Genres",
-                                color='primary_genre',
-                                color_discrete_sequence=px.colors.qualitative.Bold)
-                fig_box.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-                st.plotly_chart(fig_box, use_container_width=True)
 
+        st.markdown("---")
+        st.markdown("### Distribution by Genre")
+        
+        # PREPARE DATA: Clean Genre Data
+        # Filter out NaN and literal 'nan' strings
+        valid_genres_df = df[
+            df['primary_genre'].notna() & 
+            (df['primary_genre'].astype(str).str.lower() != 'nan')
+        ]
+        
+        # Identify Top 12 Genres to keep the chart readable
+        top_genres_list = valid_genres_df['primary_genre'].value_counts().head(12).index
+        df_filtered = valid_genres_df[valid_genres_df['primary_genre'].isin(top_genres_list)]
+
+        # --- SUB-TABS FOR GENRE ANALYSIS ---
+        sub_t1, sub_t2, sub_t3 = st.tabs(["💰 Price by Genre", "💾 RAM by Genre", "⭐ Score by Genre"])
+
+        # 1. PRICE BY GENRE (Sorted by Median -> Q3)
+        with sub_t1:
+            # Calculate Median and Q3 (75th percentile)
+            price_stats = df_filtered.groupby('primary_genre')['price'].agg(
+                median='median', 
+                q3=lambda x: x.quantile(0.75)
+            )
+            # Sort by Median first, then Q3 to break ties
+            price_order = price_stats.sort_values(by=['median', 'q3'], ascending=False).index
+            
+            fig_box_p = px.box(
+                df_filtered, 
+                x='primary_genre', 
+                y='price', 
+                template='plotly_dark',
+                title="Pricing Strategy (Sorted by Median + Q3)",
+                color='primary_genre',
+                color_discrete_sequence=px.colors.qualitative.Bold
+            )
+            fig_box_p.update_traces(yhoverformat="$.2f") # Format price hover
+            fig_box_p.update_layout(
+                showlegend=False, 
+                paper_bgcolor='rgba(0,0,0,0)', 
+                plot_bgcolor='rgba(0,0,0,0)',
+                xaxis={'categoryorder':'array', 'categoryarray': price_order} # Apply Advanced Sorting
+            )
+            st.plotly_chart(fig_box_p, use_container_width=True)
+
+        # 2. RAM BY GENRE (Sorted by Median -> Q3)
+        with sub_t2:
+            # --- NEW: OUTLIER CONTROL ---
+            # Toggle to hide extreme values to make the chart more readable
+            hide_extreme = st.toggle("🚫 Hide Extreme Outliers (> 20GB)", value=True)
+            
+            # Create a plotting dataframe based on the toggle
+            if hide_extreme:
+                df_ram_plot = df_filtered[df_filtered['min_ram_gb'] <= 20]
+            else:
+                df_ram_plot = df_filtered
+
+            # Calculate Median and Q3 (Based on the Visible Data)
+            ram_stats = df_ram_plot.groupby('primary_genre')['min_ram_gb'].agg(
+                median='median', 
+                q3=lambda x: x.quantile(0.75)
+            )
+            # Sort order logic
+            ram_order = ram_stats.sort_values(by=['median', 'q3'], ascending=False).index
+            
+            fig_box_r = px.box(
+                df_ram_plot, 
+                x='primary_genre', 
+                y='min_ram_gb', 
+                template='plotly_dark',
+                title=f"Hardware Demands {'(Standard Range)' if hide_extreme else '(Full Range)'}",
+                color='primary_genre',
+                labels={'min_ram_gb': 'Min RAM (GB)'},
+                color_discrete_sequence=px.colors.qualitative.Pastel
+            )
+            
+            fig_box_r.update_layout(
+                showlegend=False, 
+                paper_bgcolor='rgba(0,0,0,0)', 
+                plot_bgcolor='rgba(0,0,0,0)',
+                xaxis={'categoryorder':'array', 'categoryarray': ram_order}, # Apply Sorting
+                yaxis=dict(dtick=2 if hide_extreme else 4) # Tighter grid lines if zoomed in
+            )
+            st.plotly_chart(fig_box_r, use_container_width=True)
+
+        # 3. SCORE BY GENRE (Sorted by Median -> Q3)
+        with sub_t3:
+            # Filter for rated games only
+            df_scored = df_filtered[df_filtered['critic_score'] > 0]
+            
+            # Calculate Median and Q3
+            score_stats = df_scored.groupby('primary_genre')['critic_score'].agg(
+                median='median', 
+                q3=lambda x: x.quantile(0.75)
+            )
+            score_order = score_stats.sort_values(by=['median', 'q3'], ascending=False).index
+            
+            fig_box_s = px.box(
+                df_scored, 
+                x='primary_genre', 
+                y='critic_score', 
+                template='plotly_dark',
+                title="Critic Quality (Sorted by Performance)",
+                color='primary_genre',
+                labels={'critic_score': 'User Score (0-100)'},
+                color_discrete_sequence=px.colors.qualitative.Vivid
+            )
+            
+            # Format hover to 1 decimal place
+            fig_box_s.update_traces(yhoverformat=".1f") 
+            
+            fig_box_s.update_layout(
+                showlegend=False, 
+                paper_bgcolor='rgba(0,0,0,0)', 
+                plot_bgcolor='rgba(0,0,0,0)',
+                xaxis={'categoryorder':'array', 'categoryarray': score_order}, # Apply Advanced Sorting
+                yaxis=dict(tickformat=".1f")
+            )
+            st.plotly_chart(fig_box_s, use_container_width=True)
+
+    # ==========================================================================
+    # TAB 2: SENTIMENT (Fixed Column Names)
+    # ==========================================================================
     with tab2:
         st.markdown("### Rating & Quality Metrics")
-        if 'rating' in df.columns and 'primary_genre' in df.columns:
-            # Bar Chart: Avg Rating by Genre
-            avg_rating_genre = df.groupby('primary_genre')['rating'].mean().sort_values(ascending=False).head(15)
+        if 'critic_score' in df.columns and 'primary_genre' in df.columns:
+            rated_games = df[df['critic_score'] > 0]
             
-            fig_bar = px.bar(x=avg_rating_genre.values, y=avg_rating_genre.index, orientation='h',
-                            template='plotly_dark',
-                            title="Average User Rating by Genre",
-                            color=avg_rating_genre.values,
-                            color_continuous_scale='Viridis')
-            fig_bar.update_layout(yaxis={'categoryorder':'total ascending'}, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-            st.plotly_chart(fig_bar, use_container_width=True)
+            if not rated_games.empty:
+                avg_rating_genre = rated_games.groupby('primary_genre')['critic_score'].mean().sort_values(ascending=False).head(15)
+                
+                fig_bar = px.bar(x=avg_rating_genre.values, y=avg_rating_genre.index, orientation='h',
+                                template='plotly_dark',
+                                title="Average User Rating by Genre (Rated Games Only)",
+                                labels={'x': 'Average Score (0-100)', 'y': 'Genre'},
+                                color=avg_rating_genre.values,
+                                color_continuous_scale='Viridis')
+                fig_bar.update_layout(yaxis={'categoryorder':'total ascending'}, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+                st.plotly_chart(fig_bar, use_container_width=True)
+            else:
+                st.warning("No rated games found in the dataset.")
 
+    # ==========================================================================
+    # TAB 3: TEXT ANALYTICS (Fixed Column Names)
+    # ==========================================================================
     with tab3:
         st.markdown("### 📝 Description Text Analysis")
         st.markdown("Length of description vs User Rating.")
         
-        if 'description' in df.columns and 'rating' in df.columns:
-            df['desc_len'] = df['description'].str.len()
+        if 'description' in df.columns and 'critic_score' in df.columns:
+            text_df = df.copy()
+            text_df['desc_len'] = text_df['description'].astype(str).str.len()
+            text_df = text_df[text_df['critic_score'] > 0]
             
-            fig_scatter = px.scatter(df, x='desc_len', y='rating', 
-                                    template='plotly_dark',
-                                    opacity=0.5,
-                                    title="Does Description Length Correlate with Rating?",
-                                    color_discrete_sequence=['#ff00ff'])
-            fig_scatter.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-            st.plotly_chart(fig_scatter, use_container_width=True)
-
+            if not text_df.empty:
+                fig_scatter = px.scatter(text_df, x='desc_len', y='critic_score', 
+                                        template='plotly_dark',
+                                        opacity=0.5,
+                                        title="Does Description Length Correlate with Rating?",
+                                        labels={'desc_len': 'Description Character Count', 'critic_score': 'Score'},
+                                        color_discrete_sequence=['#ff00ff'])
+                fig_scatter.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+                st.plotly_chart(fig_scatter, use_container_width=True)
+            else:
+                st.warning("No rated games available for text analysis.")
 
 # ==============================================================================
 # PAGE 3: NEURAL DISCOVERY LAB (FINAL LAYOUT)
@@ -731,7 +924,19 @@ elif page == "Neural Discovery Lab":
 
     with col_left:
         st.markdown("### 📡 TARGET SELECTION")
-        game_list = sorted(df['name'].dropna().astype(str).unique())
+
+        # --- FILTER LOGIC ---
+        # 1. Create a subset where 'primary_genre' is NOT NaN
+        # We check both .notna() (for real missing values) AND string 'nan' (for converted missing values)
+        valid_genre_df = df[
+            df['primary_genre'].notna() & 
+            (df['primary_genre'].astype(str).str.lower() != 'nan')
+        ]
+        
+        # 2. Generate the game list from this specific subset
+        game_list = sorted(valid_genre_df['name'].dropna().astype(str).unique())
+        
+        # 3. Render Selectbox
         selected_game = st.selectbox("Select Subject:", game_list, label_visibility="collapsed")
         
         if selected_game:
@@ -747,7 +952,7 @@ elif page == "Neural Discovery Lab":
             else:
                 ram_display = "N/A"
 
-            # 2. Score and Social Logic (Ensuring variables exist)
+            # 2. Score and Social Logic
             raw_social = row.get('social_score', 0)
             s_score = 0 if pd.isna(raw_social) else int(raw_social)
             social_display = "🟢" * min(s_score, 5) if s_score > 0 else "⚫ No Links"
@@ -757,12 +962,12 @@ elif page == "Neural Discovery Lab":
 
             # 3. THE CARD RENDERING
             st.markdown(f"""
-            <div class="glass-card" style="height: 220px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="glass-card" style="min-height: 220px; height: auto; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                     <h2 style="color:#00ffcc; margin:0; font-size:1.6rem; line-height:1.2;">{selected_game}</h2>
                     <p style="color:#888; font-size:0.9rem; margin-top:5px;">{row.get('primary_genre', 'Unknown')}</p>
                 </div>
-                <div>
+                <div style="margin-top: 20px;"> <!-- Added margin top to ensure spacing on grow -->
                     <hr style="border-color:#333; margin: 10px 0;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div style="text-align:left;">
@@ -812,13 +1017,22 @@ elif page == "Neural Discovery Lab":
     if selected_game:
         # 1. AI GENOME CARD (Bottom Left)
         with col_ai:
-            # Predict Topic using the same logic as the training
-            input_vec = tfidf_lda.transform([str(df.iloc[idx]['description'])])
+            # Safe text extraction
+            raw_desc = row.get('description', '')
+            desc_text = str(raw_desc) if pd.notna(raw_desc) and len(str(raw_desc)) > 5 else "No description available."
+            
+            # Predict Topic
+            input_vec = tfidf_lda.transform([desc_text])
             topic_dist = lda_model.transform(input_vec)
             top_topic = topic_dist.argmax()
             conf = topic_dist[0][top_topic]
             
-            # Aligned Labels from your Notebook
+            # Get actual keywords (The "DNA")
+            feature_names = tfidf_lda.get_feature_names_out()
+            top_words_idx = lda_model.components_[top_topic].argsort()[:-6:-1]
+            topic_keywords = ", ".join([feature_names[i] for i in top_words_idx])
+
+            # Labels
             labels = {
                 0: "Creation & World",
                 1: "Combat & Survival",
@@ -826,19 +1040,23 @@ elif page == "Neural Discovery Lab":
                 3: "Action & Speed",
                 4: "Narrative & Story"
             }
-            
+            label_text = labels.get(top_topic, f"Topic {top_topic}")
+
+            # RENDER CARD (Comments removed to fix raw code display)
             st.markdown(f"""
-            <div class="glass-card" style="border: 1px solid #00ffcc; height: 260px;">
+            <div class="glass-card" style="border: 1px solid #00ffcc; min-height: 260px;">
                 <p style="color:#888; font-size:0.8rem; margin:0;">AI GENOME DECODE</p>
-                <h2 style="color:#00ffcc; margin:10px 0; font-size:1.6rem;">{labels.get(top_topic, "Unknown")}</h2>
-                <div class="confidence-bar">
-                    <div class="confidence-fill" style="width: {conf*100}%; background-color: #00ffcc;"></div>
+                <h2 style="color:#00ffcc; margin:10px 0; font-size:1.6rem;">{label_text}</h2>
+                <div class="confidence-bar" style="height: 15px; background-color: #222; border-radius: 10px; margin-top: 10px;">
+                    <div class="confidence-fill" style="width: {conf*100}%; background-color: #00ffcc; height: 100%; border-radius: 10px;"></div>
                 </div>
                 <p style="text-align:right; color:#00ffcc; font-size:0.8rem; margin-top:5px;">CONFIDENCE: {conf:.1%}</p>
                 <hr style="border-color:#333; margin:15px 0;">
-                <p style="color:#aaa; font-size:0.8rem;"><i>Detected via Narrative DNA mapping.</i></p>
+                <p style="color:#ff00ff; font-size:0.8rem; font-weight:bold;">ACTUAL DNA (KEYWORDS):</p>
+                <p style="color:#aaa; font-family:'Courier New'; font-size:0.8rem;">[{topic_keywords}]</p>
             </div>
             """, unsafe_allow_html=True)
+        
 
         # 2. CRITIC CHATTER CONSOLE (Bottom Right)
         with col_chat:
@@ -893,31 +1111,38 @@ elif page == "Neural Discovery Lab":
 # ==============================================================================
 elif page == "Data Inspector":
     st.markdown("## 📁 DATABASE ACCESS")
-    st.markdown("Advanced query interface for the Epic Store catalog.")
     
-    # --- DISPLAY METRICS ---
-    st.markdown(f"**Found {len(dff)} matches**")
+    # --- CONTROLS ---
+    c1, c2 = st.columns([3, 1])
+    with c1:
+        st.markdown(f"**Found {len(dff)} matches**")
+    with c2:
+        # Toggle to show raw data including descriptions
+        show_raw = st.toggle("🔓 Unlock Full Data", value=False)
 
-    # --- DATA TABLE (Formatted) ---
-    st.dataframe(
-        dff,
-        column_order=("name", "primary_genre", "price", "critic_score", "review_count", "developer"),
-        column_config={
-            "name": st.column_config.TextColumn("Game Title", width="medium"),
-            "price": st.column_config.NumberColumn("Price", format="$%.2f"),
-            "critic_score": st.column_config.ProgressColumn(
-                "Critic Score", 
-                format="%d", 
-                min_value=0, 
-                max_value=100
-            ),
-            "primary_genre": st.column_config.TextColumn("Genre"),
-            "developer": st.column_config.TextColumn("Developer"),
-        },
-        use_container_width=True,
-        height=600,
-        hide_index=True
-    )
+    # --- DATA TABLE ---
+    if show_raw:
+        # VIEW 1: RAW FULL DATA (Shows EVERYTHING including description)
+        st.markdown("### Raw Data View")
+        st.dataframe(dff, use_container_width=True, height=600)
+    else:
+        # VIEW 2: CURATED VIEW + DESCRIPTION
+        st.dataframe(
+            dff,
+            # Added 'description' to this list
+            column_order=("name", "primary_genre", "price", "critic_score", "description"), 
+            column_config={
+                "name": st.column_config.TextColumn("Game Title", width="medium"),
+                "price": st.column_config.NumberColumn("Price", format="$%.2f"),
+                "critic_score": st.column_config.ProgressColumn("Critic Score", format="%d", min_value=0, max_value=100),
+                "primary_genre": st.column_config.TextColumn("Genre"),
+                # This displays the "Narrative" text you wanted
+                "description": st.column_config.TextColumn("Narrative / Description", width="large"), 
+            },
+            use_container_width=True,
+            height=600,
+            hide_index=True
+        )
 
 # --- DEBUG: INSPECT TOPICS ---
 if st.sidebar.checkbox("Show Topic Keywords"):
